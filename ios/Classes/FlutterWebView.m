@@ -99,6 +99,8 @@
     [_channel setMethodCallHandler:^(FlutterMethodCall* call, FlutterResult result) {
       [weakSelf onMethodCall:call result:result];
     }];
+      
+    [_webView addObserver:self forKeyPath:@"estimatedProgress" options:NSKeyValueObservingOptionNew context:NULL];
 
     if (@available(iOS 11.0, *)) {
       _webView.scrollView.contentInsetAdjustmentBehavior = UIScrollViewContentInsetAdjustmentNever;
@@ -431,10 +433,27 @@
 
 - (void)updateUserAgent:(NSString*)userAgent {
   if (@available(iOS 9.0, *)) {
-    [_webView setCustomUserAgent:userAgent];
+      __weak __typeof__(self) weakSelf = self;
+      [_webView evaluateJavaScript:@"navigator.userAgent" completionHandler:^(id result, NSError *error) {
+                  NSString *oldUserAgent = result;
+                  NSString *newUserAgent = [oldUserAgent stringByAppendingString:userAgent];
+                  NSDictionary *dictionary = [NSDictionary dictionaryWithObjectsAndKeys:newUserAgent, @"UserAgent", nil];
+                  [[NSUserDefaults standardUserDefaults] registerDefaults:dictionary];
+                  [[NSUserDefaults standardUserDefaults] synchronize];
+                  //9.0以后支持，在WKWebView的alloc之前设置有效，解决只更改了本地的UserAgent，网页端不修改问题
+                  [weakSelf setCustomUserAgent:newUserAgent];
+              }];
   } else {
     NSLog(@"Updating UserAgent is not supported for Flutter WebViews prior to iOS 9.");
   }
+}
+
+- (void)setCustomUserAgent:(NSString*)userAgent{
+    if (@available(iOS 9.0, *)) {
+        [_webView setCustomUserAgent:userAgent];
+    } else {
+        // Fallback on earlier versions
+    }
 }
 
 #pragma mark WKUIDelegate
@@ -448,6 +467,18 @@
   }
 
   return nil;
+}
+
+- (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
+    if ([keyPath isEqualToString:@"estimatedProgress"] && object == _webView) {
+        [_channel invokeMethod:@"onProgressChanged" arguments:@{@"progress": @(_webView.estimatedProgress)}];
+    } else {
+        [super observeValueForKeyPath:keyPath ofObject:object change:change context:context];
+    }
+}
+
+- (void)webViewDidClose:(WKWebView *)webView{
+    [_webView removeObserver:self forKeyPath:@"estimatedProgress"];
 }
 
 @end

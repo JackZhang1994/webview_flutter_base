@@ -142,6 +142,9 @@ typedef void PageStartedCallback(String url);
 /// Signature for when a [WebView] has finished loading a page.
 typedef void PageFinishedCallback(String url);
 
+/// Signature for when a [WebView] has loading a page.
+typedef void PageProgressCallback(double progress);
+
 /// Signature for when a [WebView] has failed to load a resource.
 typedef void WebResourceErrorCallback(WebResourceError error);
 
@@ -213,6 +216,7 @@ class WebView extends StatefulWidget {
     this.gestureRecognizers,
     this.onPageStarted,
     this.onPageFinished,
+    this.onPageProgress,
     this.onWebResourceError,
     this.debuggingEnabled = false,
     this.gestureNavigationEnabled = false,
@@ -343,6 +347,8 @@ class WebView extends StatefulWidget {
   /// directly in the HTML has been loaded and code injected with
   /// [WebViewController.evaluateJavascript] can assume this.
   final PageFinishedCallback onPageFinished;
+
+  final PageProgressCallback onPageProgress;
 
   /// Invoked when a web resource has failed to load.
   ///
@@ -567,6 +573,13 @@ class _PlatformCallbacksHandler implements WebViewPlatformCallbacksHandler {
     }
     for (JavascriptChannel channel in channels) {
       _javascriptChannels[channel.name] = channel;
+    }
+  }
+
+  @override
+  void onProgressChanged(double progress) {
+    if (_widget.onPageProgress != null) {
+      _widget.onPageProgress(progress);
     }
   }
 }

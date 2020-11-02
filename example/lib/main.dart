@@ -81,6 +81,9 @@ class _WebViewExampleState extends State<WebViewExample> {
           onPageFinished: (String url) {
             print('Page finished loading: $url');
           },
+          onPageProgress: (progress){
+            print(progress);
+          },
           gestureNavigationEnabled: true,
         );
       }),
