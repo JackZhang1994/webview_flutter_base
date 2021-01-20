@@ -22,10 +22,6 @@ import java.util.Date;
 
 import static io.flutter.plugins.webviewflutter.Constants.*;
 
-/**
- * 作者:chenlei
- * 时间:2020/10/31 3:47 PM
- */
 public class FileChooserActivity extends Activity {
 
     private static final int FILE_CHOOSER_REQUEST_CODE = 12322;

@@ -15,10 +15,6 @@ import androidx.core.content.ContextCompat;
 
 import static io.flutter.plugins.webviewflutter.Constants.*;
 
-/**
- * 作者:chenlei
- * 时间:2020/10/31 3:48 PM
- */
 public class FileChooserLauncher extends BroadcastReceiver {
 
     private Activity activity;

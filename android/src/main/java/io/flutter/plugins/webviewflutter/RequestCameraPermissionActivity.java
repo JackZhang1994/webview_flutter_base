@@ -11,10 +11,6 @@ import androidx.core.app.ActivityCompat;
 
 import static io.flutter.plugins.webviewflutter.Constants.ACTION_REQUEST_CAMERA_PERMISSION_FINISHED;
 
-/**
- * 作者:chenlei
- * 时间:2020/10/31 3:49 PM
- */
 public class RequestCameraPermissionActivity extends Activity {
 
     private static final int CAMERA_PERMISSION_REQUEST_CODE = 12321;

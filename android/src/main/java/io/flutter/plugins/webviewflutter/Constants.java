@@ -1,9 +1,5 @@
 package io.flutter.plugins.webviewflutter;
 
-/**
- * 作者:chenlei
- * 时间:2020/10/31 3:46 PM
- */
 class Constants {
     static final String ACTION_REQUEST_CAMERA_PERMISSION_FINISHED = "action_request_camera_permission_denied";
     static final String ACTION_FILE_CHOOSER_FINISHED = "action_file_chooser_completed";
