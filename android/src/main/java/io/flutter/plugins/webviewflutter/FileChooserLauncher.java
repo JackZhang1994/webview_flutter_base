@@ -17,20 +17,22 @@ import static io.flutter.plugins.webviewflutter.Constants.*;
 
 public class FileChooserLauncher extends BroadcastReceiver {
 
-    private Activity activity;
+    private Context activity;
     private String title;
     private String type;
     private boolean showCameraOption;
     private ValueCallback<Uri[]> filePathCallback;
 
     public FileChooserLauncher(Context context, String title, String type, boolean showCameraOption, ValueCallback<Uri[]> filePathCallback) {
-        this.activity = getActivityByContext(context);
+        //this.activity = getActivityByContext(context);
+        this.activity = context;
         this.title = title;
         this.type = type;
         this.showCameraOption = showCameraOption;
         this.filePathCallback = filePathCallback;
     }
 
+    ///类型不充分并最终导致空指针异常
     private Activity getActivityByContext(Context context) {
         if (context == null) {
             return null;
@@ -39,7 +41,6 @@ public class FileChooserLauncher extends BroadcastReceiver {
         } else if (context instanceof ContextWrapper){
             return getActivityByContext(((ContextWrapper)context).getBaseContext());
         }
-
         return null;
     }
 
@@ -68,6 +69,7 @@ public class FileChooserLauncher extends BroadcastReceiver {
         intent.putExtra(EXTRA_TITLE, title);
         intent.putExtra(EXTRA_TYPE, type);
         intent.putExtra(EXTRA_SHOW_CAMERA_OPTION, showCameraOption && hasCameraPermission());
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK );
         activity.startActivity(intent);
     }
 

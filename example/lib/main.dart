@@ -39,7 +39,7 @@ class _WebViewExampleState extends State<WebViewExample> {
   @override
   void initState() {
     super.initState();
-    if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
+    //if (Platform.isAndroid) WebView.platform = SurfaceAndroidWebView();
   }
 
   @override
@@ -57,7 +57,7 @@ class _WebViewExampleState extends State<WebViewExample> {
       // to allow calling Scaffold.of(context) so we can show a snackbar.
       body: Builder(builder: (BuildContext context) {
         return WebView(
-          initialUrl: UrlAppendAdapter.appendUrl('https://bop189.jvtd.cn/meet-m'),
+          initialUrl: 'https://design-dev.meiwu365.com/static/construction-quotation/opinion-feed-back.html?token=eyJhbGciOiJIUzI1NiJ9.eyJhcHBDbGllbnRUeXBlIjoyLCJleHAiOjE2MTgyMTU3NTUsInVzZXJJZCI6NDMwNiwiaWF0IjoxNjE4MjEyMTU1fQ.EvL9ORAxG8w38y8X3vsKYmexTj7DasbrDCQSS0fZorU&source=1&native=true',
           javascriptMode: JavascriptMode.unrestricted,
           onWebViewCreated: (WebViewController webViewController) {
             _controller.complete(webViewController);
